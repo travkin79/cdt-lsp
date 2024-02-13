@@ -2,12 +2,14 @@ package org.eclipse.cdt.lsp.services.ast;
 
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
-import org.eclipse.lsp4j.TextDocumentPositionParams;
 import org.eclipse.lsp4j.jsonrpc.validation.NonNull;
 import org.eclipse.lsp4j.util.Preconditions;
 import org.eclipse.lsp4j.util.ToStringBuilder;
 
-public class AstParams extends TextDocumentPositionParams {
+public class AstParams {
+
+	@NonNull
+	private TextDocumentIdentifier textDocument;
 
 	@NonNull
 	private Range range;
@@ -16,8 +18,17 @@ public class AstParams extends TextDocumentPositionParams {
 	}
 
 	public AstParams(@NonNull final TextDocumentIdentifier textDocument, @NonNull final Range range) {
-		super(textDocument, range.getStart());
+		this.textDocument = Preconditions.<TextDocumentIdentifier>checkNotNull(textDocument, "textDocument"); //$NON-NLS-1$
 		this.range = Preconditions.<Range>checkNotNull(range, "range"); //$NON-NLS-1$
+	}
+
+	@NonNull
+	public TextDocumentIdentifier getTextDocument() {
+		return this.textDocument;
+	}
+
+	public void setTextDocument(@NonNull final TextDocumentIdentifier textDocument) {
+		this.textDocument = Preconditions.<TextDocumentIdentifier>checkNotNull(textDocument, "textDocument"); //$NON-NLS-1$
 	}
 
 	@NonNull
