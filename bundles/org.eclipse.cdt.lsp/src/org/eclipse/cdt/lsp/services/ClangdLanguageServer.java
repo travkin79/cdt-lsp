@@ -14,12 +14,17 @@ package org.eclipse.cdt.lsp.services;
 
 import java.util.concurrent.CompletableFuture;
 
+import org.eclipse.cdt.lsp.services.ast.AstNode;
+import org.eclipse.cdt.lsp.services.ast.AstParams;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.services.LanguageServer;
 
 /**
  * Interface extending the {@link LanguageServer} with clangd extensions.
+ * More details about LSP usage and extension see the
+ * <a href="https://github.com/eclipse-lsp4j/lsp4j/blob/main/documentation/jsonrpc.md">
+ * org.eclipse.lsp4j project's documentation</a>.
  *
  * @see https://clangd.llvm.org/extensions
  */
@@ -39,4 +44,7 @@ public interface ClangdLanguageServer extends LanguageServer {
 	 */
 	@JsonRequest(value = "textDocument/switchSourceHeader")
 	CompletableFuture<String> switchSourceHeader(TextDocumentIdentifier textDocument);
+
+	@JsonRequest(value = "textDocument/ast")
+	CompletableFuture<AstNode> getAst(AstParams astParameters);
 }
