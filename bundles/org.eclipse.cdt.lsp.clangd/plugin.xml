@@ -75,6 +75,10 @@
             id="org.eclipse.cdt.lsp.clangd.editor.commands.command.getAst"
             name="Receive Abstract Syntax Tree">
       </command>
+      <command
+            id="org.eclipse.cdt.lsp.clangd.editor.commands.command.getSymbolInfo"
+            name="Receive Symbol Info">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -109,6 +113,18 @@
             	</with>
          </activeWhen>
       </handler>
+      <handler
+            class="org.eclipse.cdt.lsp.internal.clangd.editor.handlers.ReceiveSymbolInfoCommandHandler"
+            commandId="org.eclipse.cdt.lsp.clangd.editor.commands.command.getSymbolInfo">
+         <activeWhen>
+            <with
+                  variable="activeEditor">
+               <test
+                     property="org.eclipse.cdt.lsp.editor.active">
+               </test>
+            </with>
+         </activeWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -126,6 +142,14 @@
          <command
                commandId="org.eclipse.cdt.lsp.clangd.editor.commands.command.getAst"
                label="Receive AST"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.cdt.lsp.clangd.editor.commands.command.getSymbolInfo"
+               label="Receive Symbol Info"
                style="push">
             <visibleWhen
                   checkEnabled="true">

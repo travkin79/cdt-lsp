@@ -16,7 +16,9 @@ import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.cdt.lsp.services.ast.AstNode;
 import org.eclipse.cdt.lsp.services.ast.AstParams;
+import org.eclipse.cdt.lsp.services.symbolinfo.SymbolDetails;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
+import org.eclipse.lsp4j.TextDocumentPositionParams;
 import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.services.LanguageServer;
 
@@ -47,4 +49,7 @@ public interface ClangdLanguageServer extends LanguageServer {
 
 	@JsonRequest(value = "textDocument/ast")
 	CompletableFuture<AstNode> getAst(AstParams astParameters);
+
+	@JsonRequest(value = "textDocument/symbolInfo")
+	CompletableFuture<SymbolDetails[]> getSymbolInfo(TextDocumentPositionParams positionParameters);
 }
