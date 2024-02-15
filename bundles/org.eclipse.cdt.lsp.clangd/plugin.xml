@@ -79,6 +79,10 @@
             id="org.eclipse.cdt.lsp.clangd.editor.commands.command.getSymbolInfo"
             name="Receive Symbol Info">
       </command>
+      <command
+            id="org.eclipse.cdt.lsp.clangd.editor.commands.command.getSignatureHelp"
+            name="Receive Signature Help">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -125,6 +129,18 @@
             </with>
          </activeWhen>
       </handler>
+      <handler
+            class="org.eclipse.cdt.lsp.internal.clangd.editor.handlers.ReceiveSignatureHelpCommandHandler"
+            commandId="org.eclipse.cdt.lsp.clangd.editor.commands.command.getSignatureHelp">
+         <activeWhen>
+            <with
+                  variable="activeEditor">
+               <test
+                     property="org.eclipse.cdt.lsp.editor.active">
+               </test>
+            </with>
+         </activeWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -150,6 +166,14 @@
          <command
                commandId="org.eclipse.cdt.lsp.clangd.editor.commands.command.getSymbolInfo"
                label="Receive Symbol Info"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.cdt.lsp.clangd.editor.commands.command.getSignatureHelp"
+               label="Receive Signature Help"
                style="push">
             <visibleWhen
                   checkEnabled="true">
