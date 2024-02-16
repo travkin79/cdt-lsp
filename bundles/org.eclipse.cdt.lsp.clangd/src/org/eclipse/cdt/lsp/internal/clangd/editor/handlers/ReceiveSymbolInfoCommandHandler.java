@@ -1,6 +1,7 @@
 package org.eclipse.cdt.lsp.internal.clangd.editor.handlers;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.eclipse.cdt.lsp.services.ClangdLanguageServer;
@@ -63,7 +64,7 @@ public class ReceiveSymbolInfoCommandHandler extends AbstractHandler {
 						.get();
 				if (result.isPresent()) {
 					// TODO return AST
-					System.out.println(result.get());
+					System.out.println(Arrays.asList(result.get()));
 				}
 			} catch (InterruptedException | java.util.concurrent.ExecutionException e) {
 				// TODO Auto-generated catch block

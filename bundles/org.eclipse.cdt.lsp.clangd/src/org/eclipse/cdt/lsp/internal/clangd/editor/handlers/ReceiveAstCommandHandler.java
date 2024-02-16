@@ -51,8 +51,6 @@ public class ReceiveAstCommandHandler extends AbstractHandler {
 			}
 			AstParams astArguments = new AstParams(LSPEclipseUtils.toTextDocumentIdentifier(document), range);
 
-			String astResult = null;
-
 			try {
 				Optional<AstNode> result = LanguageServers.forDocument(document)
 						.computeFirst(server -> server instanceof ClangdLanguageServer
