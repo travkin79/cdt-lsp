@@ -33,7 +33,7 @@ import org.eclipse.lsp4j.services.LanguageServer;
 public interface ClangdLanguageServer extends LanguageServer {
 
 	/**
-	 * The switchSourceHeader request is sent from the client to the server to
+	 * The <em>textDocument/switchSourceHeader</em> request is sent from the client to the server to
 	 * <ul>
 	 * <li>get the corresponding header if a source file was provided</li>
 	 * <li>get the source file if a header was provided</li>
@@ -47,9 +47,30 @@ public interface ClangdLanguageServer extends LanguageServer {
 	@JsonRequest(value = "textDocument/switchSourceHeader")
 	CompletableFuture<String> switchSourceHeader(TextDocumentIdentifier textDocument);
 
+	/**
+	 * The <em>textDocument/ast</em> request is sent from the client to the server in order to get
+	 * details about the program structure (so called abstract syntax tree or AST) in a C++ file.
+	 * The structure can be requested for the whole file or for a certain range.
+	 *
+	 * @param astParameters request parameters containing the document identifier and requested documented range
+	 * @return the abstract syntax tree root node (with child hierarchy) for the requested document and range
+	 *
+	 * @see https://clangd.llvm.org/extensions#ast
+	 */
 	@JsonRequest(value = "textDocument/ast")
 	CompletableFuture<AstNode> getAst(AstParams astParameters);
 
+	/**
+	 * The <em>textDocument/symbolInfo</em> request is sent from the client to the server in order to access
+	 * details about the element under the cursor. The response provides details like the element's name,
+	 * its parent container's name, and some clangd-specific element IDs (e.g. the "unified symbol resolution"
+	 * identifier).
+	 *
+	 * @param positionParameters request parameters containing the document identifier and the current cursor position
+	 * @return the details about the symbol on the given position
+	 *
+	 * @see https://clangd.llvm.org/extensions#symbol-info-request
+	 */
 	@JsonRequest(value = "textDocument/symbolInfo")
 	CompletableFuture<SymbolDetails[]> getSymbolInfo(TextDocumentPositionParams positionParameters);
 }
