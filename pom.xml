@@ -132,6 +132,38 @@
   </plugins>
  </build>
   <profiles>
+		<profile>
+			<id>osx</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+				          <groupId>org.eclipse.tycho</groupId>
+				          <artifactId>tycho-surefire-plugin</artifactId>
+				          <version>${tycho.version}</version>
+				          <configuration>
+				            <useUIHarness>true</useUIHarness>
+				            <useUIThread>true</useUIThread>
+				            <providerHint>junit5</providerHint>
+				            <dependencies>
+				              <dependency>
+				                <type>p2-installable-unit</type>
+				                <artifactId>org.eclipse.platform.feature.group</artifactId>
+				              </dependency>
+				            </dependencies>
+				            <product>org.eclipse.platform.ide</product>
+				            <argLine>-XstartOnFirstThread</argLine>
+				          </configuration>
+				        </plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
     <profile>
       <id>production</id>
       <build>
