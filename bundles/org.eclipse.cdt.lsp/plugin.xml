@@ -353,6 +353,12 @@
             name="%EditorPreferencePage.name">
       </page>
       <page
+            category="org.eclipse.cdt.lsp.editor.preferencePage"
+            class="org.eclipse.cdt.lsp.internal.ui.LspTemplatePreferencePage"
+            id="org.eclipse.cdt.lsp.editor.templates.preferencePage"
+            name="Templates (LSP)">
+      </page>
+      <page
 	        name="%SaveActionsPreferencePage.name"
 	        category="org.eclipse.cdt.lsp.editor.preferencePage"
 	        class="org.eclipse.cdt.lsp.internal.ui.SaveActionsConfigurationPage"
@@ -447,6 +453,27 @@
             name="%CEditor.name"
             parentId="org.eclipse.ui.genericeditor.genericEditorContext">
       </context>
-   </extension>  
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.templates">
+      <contextType
+         class="org.eclipse.cdt.lsp.editor.assist.LspDefaultTemplateContextType"
+         id="org.eclipse.cdt.lsp.templates.context"
+         name="LSP default context"
+         registryId="org.eclipse.cdt.lsp.templates">
+      </contextType>
+      <include
+          file="resources/templates/templates.xml"
+          translations="resources/templates/templates.properties">
+     </include>
+      <contextTypeRegistry
+           id="org.eclipse.cdt.lsp.templates">
+     </contextTypeRegistry>
+   </extension>
+   <extension point="org.eclipse.ui.genericeditor.contentAssistProcessors">
+      <contentAssistProcessor
+            class="org.eclipse.cdt.lsp.editor.assist.LspTemplateCompletionProcessor"
+            contentType="org.eclipse.core.runtime.text" />
+   </extension>
 </plugin>
 

@@ -30,7 +30,8 @@ final class ClangdPreferredOptions extends PreferredOptions implements ClangdOpt
 
 	@Override
 	public String clangdPath() {
-		return stringValue(ClangdMetadata.Predefined.clangdPath);
+		return "/usr/local/clangd-test/bin/clangd";
+		//return stringValue(ClangdMetadata.Predefined.clangdPath);
 	}
 
 	@Override

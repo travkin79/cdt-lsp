@@ -13,12 +13,21 @@
 
 package org.eclipse.cdt.lsp.plugin;
 
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.cdt.lsp.editor.assist.LspDefaultTemplateContextType;
 import org.eclipse.cdt.lsp.internal.server.CLanguageServerEnableCache;
 import org.eclipse.cdt.lsp.internal.server.CLanguageServerRegistry;
 import org.eclipse.cdt.lsp.server.ICLanguageServerProvider;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.text.templates.TemplateContextType;
+import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.text.templates.ContextTypeRegistry;
+import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
+import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -32,10 +41,15 @@ public class LspPlugin extends AbstractUIPlugin {
 	public static final String LSP_C_EDITOR_ID = "org.eclipse.cdt.lsp.CEditor"; //$NON-NLS-1$
 	public static final String C_EDITOR_ID = "org.eclipse.cdt.ui.editor.CEditor"; //$NON-NLS-1$
 
+	private static final String CUSTOM_TEMPLATES_KEY = "org.eclipse.cdt.lsp.text.templates.custom"; //$NON-NLS-1$
+
 	// The shared instance
 	private static LspPlugin plugin;
 
 	private ICLanguageServerProvider cLanguageServerProvider;
+
+	private ContributionContextTypeRegistry contextTypeRegistry = null;
+	private TemplateStore templateStore = null;
 
 	// Disable warnings, see https://github.com/eclipse-cdt/cdt-lsp/issues/88 and https://github.com/eclipse-cdt/cdt-lsp/issues/101.
 	// We keep this reference to avoid the logger being garbage collected.
@@ -75,6 +89,59 @@ public class LspPlugin extends AbstractUIPlugin {
 
 	public ICLanguageServerProvider getCLanguageServerProvider() {
 		return cLanguageServerProvider;
+	}
+
+	public ContextTypeRegistry getTemplateContextRegistry() {
+		if (contextTypeRegistry == null) {
+			contextTypeRegistry = new ContributionContextTypeRegistry("org.eclipse.cdt.lsp.templates");
+			contextTypeRegistry.addContextType(LspDefaultTemplateContextType.CONTEXT_ID);
+			//contextTypeRegistry.addContextType(LspCommentContextType.ID);
+		}
+		return contextTypeRegistry;
+	}
+
+	@SuppressWarnings("deprecation")
+	private static class ContextTypeRegistryWrapper extends org.eclipse.jface.text.templates.ContextTypeRegistry {
+
+		@Override
+		public void addContextType(TemplateContextType contextType) {
+			delegate.addContextType(contextType);
+		}
+
+		@Override
+		public Iterator<TemplateContextType> contextTypes() {
+			return delegate.contextTypes();
+		}
+
+		@Override
+		public TemplateContextType getContextType(String id) {
+			return delegate.getContextType(id);
+		}
+
+		private final ContextTypeRegistry delegate;
+
+		public ContextTypeRegistryWrapper(ContextTypeRegistry registry) {
+			this.delegate = registry;
+		}
+
+	}
+
+	public static ContextTypeRegistryWrapper from(ContextTypeRegistry registry) {
+		return new ContextTypeRegistryWrapper(registry);
+	}
+
+	public TemplateStore getTemplateStore() {
+		if (templateStore == null) {
+			templateStore = new ContributionTemplateStore(from(getTemplateContextRegistry()), getPreferenceStore(),
+					CUSTOM_TEMPLATES_KEY);
+			try {
+				templateStore.load();
+			} catch (IOException e) {
+				Platform.getLog(this.getClass()).error(e.getMessage(), e);
+			}
+			templateStore.startListeningForPreferenceChanges();
+		}
+		return templateStore;
 	}
 
 }

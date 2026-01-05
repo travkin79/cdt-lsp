@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+    <template
+        name="author-comment"
+        description="%describe.author"
+        id="org.eclipse.cdt.lsp.templates.copyright"
+        context="org.eclipse.cdt.lsp.templates.context"
+        enabled="true"
+        autoinsert="false">%template.author
+    </template>
+
+</templates>
