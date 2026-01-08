@@ -457,9 +457,27 @@
    <extension
          point="org.eclipse.ui.editors.templates">
       <contextType
-         class="org.eclipse.cdt.lsp.editor.assist.LspDefaultTemplateContextType"
+         class="org.eclipse.cdt.lsp.editor.assist.DefaultLspTemplateContextType"
          id="org.eclipse.cdt.lsp.templates.context"
-         name="LSP default context"
+         name="Default context (LSP)"
+         registryId="org.eclipse.cdt.lsp.templates">
+      </contextType>
+      <contextType
+         class="org.eclipse.cdt.lsp.editor.assist.CommentLspTemplateContextType"
+         id="org.eclipse.cdt.lsp.templates.context.comment"
+         name="Comment (LSP)"
+         registryId="org.eclipse.cdt.lsp.templates">
+      </contextType>
+      <contextType
+         class="org.eclipse.cdt.lsp.editor.assist.CommentDocumentationLspTemplateContextType"
+         id="org.eclipse.cdt.lsp.templates.context.comment.doc"
+         name="C/C++ (LSP)"
+         registryId="org.eclipse.cdt.lsp.templates">
+      </contextType>
+      <contextType
+         class="org.eclipse.cdt.lsp.editor.assist.CppLspTemplateContextType"
+         id="org.eclipse.cdt.lsp.templates.context.cpp"
+         name="C/C++ (LSP)"
          registryId="org.eclipse.cdt.lsp.templates">
       </contextType>
       <include

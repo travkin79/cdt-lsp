@@ -3,12 +3,11 @@
 <templates>
 
     <template
-        name="author-comment"
-        description="%describe.author"
-        id="org.eclipse.cdt.lsp.templates.copyright"
-        context="org.eclipse.cdt.lsp.templates.context"
+        name="author"
+        description="%author.description"
+        id="org.eclipse.cdt.lsp.templates.author"
+        context="org.eclipse.cdt.lsp.templates.context.comment.doc"
         enabled="true"
-        autoinsert="false">%template.author
-    </template>
+        autoinsert="false">%author.pattern</template>
 
 </templates>

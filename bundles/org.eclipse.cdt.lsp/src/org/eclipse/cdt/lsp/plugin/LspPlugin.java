@@ -18,7 +18,10 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.cdt.lsp.editor.assist.LspDefaultTemplateContextType;
+import org.eclipse.cdt.lsp.editor.assist.CommentDocumentationLspTemplateContextType;
+import org.eclipse.cdt.lsp.editor.assist.CommentLspTemplateContextType;
+import org.eclipse.cdt.lsp.editor.assist.CppLspTemplateContextType;
+import org.eclipse.cdt.lsp.editor.assist.DefaultLspTemplateContextType;
 import org.eclipse.cdt.lsp.internal.server.CLanguageServerEnableCache;
 import org.eclipse.cdt.lsp.internal.server.CLanguageServerRegistry;
 import org.eclipse.cdt.lsp.server.ICLanguageServerProvider;
@@ -41,7 +44,8 @@ public class LspPlugin extends AbstractUIPlugin {
 	public static final String LSP_C_EDITOR_ID = "org.eclipse.cdt.lsp.CEditor"; //$NON-NLS-1$
 	public static final String C_EDITOR_ID = "org.eclipse.cdt.ui.editor.CEditor"; //$NON-NLS-1$
 
-	private static final String CUSTOM_TEMPLATES_KEY = "org.eclipse.cdt.lsp.text.templates.custom"; //$NON-NLS-1$
+	private static final String CUSTOM_TEMPLATES_KEY = PLUGIN_ID + ".text.templates.custom"; //$NON-NLS-1$
+	private static final String TEMPLATES_REGISTRY_ID = PLUGIN_ID + ".templates"; //$NON-NLS-1$
 
 	// The shared instance
 	private static LspPlugin plugin;
@@ -93,9 +97,13 @@ public class LspPlugin extends AbstractUIPlugin {
 
 	public ContextTypeRegistry getTemplateContextRegistry() {
 		if (contextTypeRegistry == null) {
-			contextTypeRegistry = new ContributionContextTypeRegistry("org.eclipse.cdt.lsp.templates");
-			contextTypeRegistry.addContextType(LspDefaultTemplateContextType.CONTEXT_ID);
-			//contextTypeRegistry.addContextType(LspCommentContextType.ID);
+			contextTypeRegistry = new ContributionContextTypeRegistry(TEMPLATES_REGISTRY_ID);
+			contextTypeRegistry.addContextType(DefaultLspTemplateContextType.CONTEXT_ID);
+			contextTypeRegistry.addContextType(CommentLspTemplateContextType.CONTEXT_ID);
+			contextTypeRegistry.addContextType(CommentDocumentationLspTemplateContextType.CONTEXT_ID);
+
+			// TODO add language-specific context types, probably from extensions
+			contextTypeRegistry.addContextType(CppLspTemplateContextType.CONTEXT_ID);
 		}
 		return contextTypeRegistry;
 	}
@@ -139,6 +147,26 @@ public class LspPlugin extends AbstractUIPlugin {
 			} catch (IOException e) {
 				Platform.getLog(this.getClass()).error(e.getMessage(), e);
 			}
+
+			//			Template[] templates = CUIPlugin.getDefault().getTemplateStore().getTemplates();
+			//			for (Template template : templates) {
+			//				System.out.println("CDT template: " + template.getName() + ", " + template.getDescription() + ", "
+			//						+ template.getContextTypeId());
+			//			}
+			// TODO check if the templates were already added (and if they are custom / user-made)
+			//			for (TemplatePersistenceData data : CUIPlugin.getDefault().getTemplateStore().getTemplateData(false)) {
+			//				if ("org.eclipse.cdt.ui.text.templates.c".equals(data.getTemplate().getContextTypeId())) {
+			//					// TODO change the data, adapt the context type to LSP
+			//					Template originalTemplate = data.getTemplate();
+			//					Template templateCopy = new Template(originalTemplate.getName(), originalTemplate.getDescription(),
+			//							CppLspTemplateContextType.CONTEXT_ID, originalTemplate.getPattern(),
+			//							originalTemplate.isAutoInsertable());
+			//					TemplatePersistenceData copy = new TemplatePersistenceData(templateCopy, data.isEnabled());
+			//
+			//					templateStore.add(copy);
+			//				}
+			//			}
+
 			templateStore.startListeningForPreferenceChanges();
 		}
 		return templateStore;
